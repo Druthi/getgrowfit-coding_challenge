@@ -7,6 +7,7 @@ import LoginForm from './components/LoginForm';
 import firebase, { auth, provider } from './firebase/firebase.js';
 
 
+
 class App extends Component {
 
   constructor(props) {
@@ -45,11 +46,32 @@ class App extends Component {
   //  });
   //}
 
+  //onNameChange = (e) => {
+  //  this.setState({
+  //    ...this.state,
+  //    inputValue: {
+  //      ...this.state.inputValue,
+  //      name: e.target.value
+  //    }
+  //  });
+  //}
+//
+  //onEmailChange = (e) => {
+  //  this.setState({
+  //    ...this.state,
+  //    inputValue: {
+  //      ...this.state.inputValue,
+  //      name: e.target.value
+  //    }
+  //  });
+  //}
+
+
   render() {
     return (
       <div className="App">        
           {this.state.user ?
-          <LoginForm logout={this.logout}/>              
+          <LoginForm onNameChange={this.onNameChange} onEmailChange={this.onEmailChange} logout={this.logout}/>              
           :
           <button onClick={this.login}>Log In</button>            
           }

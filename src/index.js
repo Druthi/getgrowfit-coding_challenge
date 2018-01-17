@@ -8,6 +8,38 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import LoginForm from './components/LoginForm';
 import Main from './components/Main';
 
+//Store
+import { createStore, applyMiddleware } from 'redux';
+import { rootReducer } from './Reducers';
+import { addUser, status } from './Actions';
+import thunk from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+
+
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(
+    applyMiddleware(thunk)
+  )  
+);
+
+console.log(store.getState());
+
+const unsubscribe = store.subscribe(() =>
+console.log(store.getState())
+);
+
+
+store.dispatch(addUser('Drthi'))
+store.dispatch(addUser('Drthijf'))
+store.dispatch(addUser('uufbhi'))
+store.dispatch(status(null))
+
+
+unsubscribe;
+
+
 
 const router = (
     <Router history={browserHistory}>
@@ -21,4 +53,7 @@ const router = (
 
 
 
+  
+  
+ 
 
