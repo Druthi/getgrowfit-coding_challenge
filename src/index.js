@@ -14,6 +14,7 @@ import { rootReducer } from './Reducers';
 import { addUser, status } from './Actions';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { Provider } from 'react-redux';
 
 
 
@@ -42,11 +43,13 @@ unsubscribe;
 
 
 const router = (
+  <Provider store={store}>
     <Router history={browserHistory}>
       <Route path ="/" component={App} />
       <Route path ="LoginForm" component={LoginForm} />
       <Route path="/Main" component={Main} />
     </Router>
+  </Provider>
   )
 
   ReactDOM.render(router, document.getElementById('root'));

@@ -3,39 +3,40 @@ import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 import firebase, { auth, provider } from '../firebase/firebase.js';
 import { Well, Form, FormGroup, FormControl, Button } from 'react-bootstrap';
-
+import { connect } from 'react-redux';
 
 
 
 class LoginForm extends Component {
 
-  constructor(props) {
-    super(props);
-  //  this.state={
-  //    inputValue:{
-  //      name: "",
-  //      email: ""
-  //    }
-  //  }
+  state = {
+    inputValue: {
+      name: "",
+      ingridients: ""
+    }
   }
 
-  //onNameChange = () => {
-  //  const { inputValue } = this.state;
-  //  this.props.onNameChange(inputValue.name);
-  //  this.setState({ name: ""});
-  //}
-//
-  //onEmailChange = () => {
-  //  const { inputValue } = this.state;
-  //  this.props.onEmailChange(inputValue.email);
-  //  this.setState({ email: ""});
-  //}
+  onNameChange = (e) => {
+    this.setState({
+      ...this.state,
+      inputValue: {
+        ...this.state.inputValue,
+        name: e.target.value
+      }
+    });
+  }
 
+  onEmailChange = (e) => {
+    this.setState({
+      ...this.state,
+      inputValue: {
+        ...this.state.inputValue,
+        email: e.target.value
+      }
+    });
+  }
   
-  
-  render() {
-    //const { inputValue } = this.state;
-    
+  render() {    
     return (    
       <div className="LoginForm">        
         <Link to="/">Home</Link>        
@@ -44,11 +45,11 @@ class LoginForm extends Component {
         <Form>
           <p>Name</p>
           <FormGroup>
-            <FormControl type="text" placeholder='Recipe Name' onChange={this.onNameChange}   />
+            <FormControl type="text" placeholder='Enter Name' value={this.state.name} onChange={this.onNameChange}   />
           </FormGroup>
           <p>Email</p>
           <FormGroup>
-            <FormControl type="text" placeholder='example@gmail.com' onChange={this.onEmailChange}   size="large" />
+            <FormControl type="text" placeholder='example@gmail.com' value={this.state.email} onChange={this.onEmailChange}   size="large" />
           </FormGroup>
         </Form>      
         
@@ -57,4 +58,10 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm;
+function mapStateToProps(state) {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps)(LoginForm);
