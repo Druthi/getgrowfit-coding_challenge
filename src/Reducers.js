@@ -5,7 +5,9 @@ const initialState = {
     status: null,
     users: {
         name:"",
-        email:""
+        email:"",
+        description:"",
+        phoneNum: ""
     }
 }
 
@@ -16,10 +18,12 @@ const addProfile = (state = initialState, action)  => {
         return Object.assign({}, state, { ...this.state, 
             users:{
                 name: action.users.name,
-                email: action.users.email
+                email: action.users.email,
+                description:action.users.description,
+                phoneNum: action.users.phoneNum
             }
           })
-          
+
         case 'STATUS':
         return Object.assign({}, state, {
             status: action.status
