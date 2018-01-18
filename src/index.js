@@ -31,13 +31,6 @@ const unsubscribe = store.subscribe(() =>
 console.log(store.getState())
 );
 
-
-store.dispatch(addUser('Drthi'))
-store.dispatch(addUser('Drthijf'))
-store.dispatch(addUser('uufbhi'))
-store.dispatch(status(null))
-
-
 unsubscribe;
 
 

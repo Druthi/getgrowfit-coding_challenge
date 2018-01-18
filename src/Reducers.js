@@ -3,22 +3,23 @@ import { combineReducers } from 'redux';
 
 const initialState = {
     status: null,
-    users: []
+    users: {
+        name:"",
+        email:""
+    }
 }
 
 const addProfile = (state = initialState, action)  => {
+    console.log(action);
     switch(action.type) {
         case 'ADD_USER':
-        return Object.assign({}, state, {
-            users: [
-              ...state.users,
-              {
-                name: action.name,
-                email: action.email
-              }
-            ]
+        return Object.assign({}, state, { ...this.state, 
+            users:{
+                name: action.users.name,
+                email: action.users.email
+            }
           })
-
+          
         case 'STATUS':
         return Object.assign({}, state, {
             status: action.status
