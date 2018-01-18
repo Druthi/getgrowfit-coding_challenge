@@ -18,6 +18,9 @@ import { bindActionCreators } from 'redux';
 //import component
 import Main from './Main';
 
+import uuidv4 from 'uuid/v4';
+import { pickBy } from 'lodash';
+
 class LoginForm extends Component {
   constructor(props){
     super(props);
@@ -90,7 +93,9 @@ class LoginForm extends Component {
   //Sets the redux store with all the input field values
   onSubmit = (e) => {
     e.preventDefault();
-    this.props.addUser(this.state.inputValue);
+    //const userId = uuidv4();
+    const value = this.state.inputValue
+    this.props.addUser(value);
     this.setState({
       inputValue: {
         name:"",
@@ -168,10 +173,7 @@ class LoginForm extends Component {
               <Button onClick={this.close}>Close</Button>
             </Modal.Footer>
         </Modal>
-          <p>{this.props.addProfile.users.name}</p>
-          <p>{this.props.addProfile.users.email}</p>
-          <p>{this.props.addProfile.users.description}</p>
-          <p>{this.props.addProfile.users.phoneNum}</p>
+          
 
                 
         <Button onClick={this.props.logout}>Log out</Button>
@@ -193,3 +195,8 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+
+//<p>{this.props.addProfile.users.name}</p>
+//          <p>{this.props.addProfile.users.email}</p>
+//          <p>{this.props.addProfile.users.description}</p>
+//          <p>{this.props.addProfile.users.phoneNum}</p>
