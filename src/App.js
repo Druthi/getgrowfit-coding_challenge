@@ -6,7 +6,8 @@ import { Link } from 'react-router';
 import LoginForm from './components/LoginForm';
 import firebase, { auth, provider } from './firebase/firebase.js';
 import { connect } from 'react-redux';
-import { addUser } from './Actions';
+import * as Actions from './Actions';
+import { bindActionCreators } from 'redux';
 
 
 
@@ -15,7 +16,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null      
+      user: null,
+      didMount:false      
     }
   }
 
@@ -26,7 +28,15 @@ class App extends Component {
         this.setState({
           user:user
         });
+   //     const x = this.props.addProfile;
+   //     const person = pickBy(
+   //       x,
+   //       ({ email }) => email === user.email
+   //     );
+   //     if(person !== null || person !== undefined)
+   //     
       });
+      
       console.log(this.state.user);
   }
 
@@ -37,41 +47,49 @@ class App extends Component {
           user: null
         });
       });
-      console.log(this.state.user);
+      console.log(this.state.user.email);
   }
 
-//componentDidMount() {
-//  auth.onAuthStateChanged((user) => {
-//    if (user) {
-//      this.setState({ user });
-//    } 
-//  });
-//}
-//onNameChange = (e) => {
-//  this.setState({
-//    ...this.state,
-//    inputValue: {
-//      ...this.state.inputValue,
-//      name: e.target.value
-//    }
-//  });
-//}
-//onEmailChange = (e) => {
-//  this.setState({
-//    ...this.state,
-//    inputValue: {
-//      ...this.state.inputValue,
-//      name: e.target.value
-//    }
-//  });
-//}
 
+  componentDidMount() {
+  //  auth.onAuthStateChanged((user) => {
+  //    if (user) {
+  //      this.setState({ user });
+  //    } 
+  //  });
+  // 
+  console.log(this.state.didMount);
+  if(this.state.didMount == false) {
+    const userRef = firebase.database().ref('users');
+    userRef.on('value', (snapshot) => {
+      let users = snapshot.val();
+      console.log(users);
+      if(users){
+        let newState = {};
+        for (let user in users) {
+          newState[users[user].userId] = {
+            name: users[user].name,
+            email: users[user].email,
+            description: users[user].description,
+            phoneNum: users[user].phoneNum
+          }      
+        }
+        this.props.pullFire(newState);
+      }
+    });
+    this.setState({ ...this.state,
+      didMount:true
+    });  
+  }      
+}  
+
+    
 
   render() {
     return (
       <div className="App">        
           {this.state.user ?
-          <LoginForm logout={this.logout}/>              
+          <LoginForm user={this.state.user} logout={this.logout}/>              
           :
           <button onClick={this.login}>Log In</button>            
           }
@@ -80,10 +98,15 @@ class App extends Component {
     );
   }
 }
-function mapStateToProps(state) {
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(Actions, dispatch);
+}
+
+const mapStateToProps = (state) => {
   return {
-    status: state.status
+    addProfile: state.addProfile
   }
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

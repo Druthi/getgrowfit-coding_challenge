@@ -17,8 +17,8 @@ import { bindActionCreators } from 'redux';
 
 //import component
 import Main from './Main';
+import DisplayInfo from'./DisplayInfo';
 
-import uuidv4 from 'uuid/v4';
 import { pickBy } from 'lodash';
 
 class LoginForm extends Component {
@@ -93,10 +93,10 @@ class LoginForm extends Component {
   //Sets the redux store with all the input field values
   onSubmit = (e) => {
     e.preventDefault();
-    //const userId = uuidv4();
     const value = this.state.inputValue
     this.props.addUser(value);
     this.setState({
+      showModal:false,
       inputValue: {
         name:"",
         email:"",
@@ -105,7 +105,9 @@ class LoginForm extends Component {
       }
     });
   } 
-  
+
+
+    
   render() { 
     const { inputValue } = this.state;  
     return (    
@@ -174,7 +176,7 @@ class LoginForm extends Component {
             </Modal.Footer>
         </Modal>
           
-
+        
                 
         <Button onClick={this.props.logout}>Log out</Button>
                  
