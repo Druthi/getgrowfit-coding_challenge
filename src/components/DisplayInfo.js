@@ -13,29 +13,34 @@ class DisplayInfo extends Component {
         super(props);
         
     }
-
-
     render() {
+        console.log(this.props.addProfile);
         //const obj = Object.assign(this.props.ingrid);
         //console.log(obj);
-        console.log(this.props.addProfile.name);
+        console.log(this.props.addProfile);
 
         return (
-            <div className="DisplayInfo">                
-                   <p>Name: {this.props.addProfile.users[this.props.addProfile.userId].name} </p>
+            <div className="DisplayInfo">  
+                <h1>WELCOME {this.props.name}</h1>              
+                   <p>Name:{this.props.name}</p>
+                   <p>Email:{this.props.email}</p>
+                   <p>description:{this.props.description}</p>
+                   <p>Phone Number:{this.props.phoneNum}</p>
             </div>
-    );
+        );
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Actions, dispatch);
-  }
-  
-  const mapStateToProps = (state) => {
-    return {
-      addProfile: state.addProfile
+
+//Connect component to store
+    const mapDispatchToProps = (dispatch) => {
+        return bindActionCreators(Actions, dispatch);
+      }
+    
+    const mapStateToProps = (state) => {
+        return {
+            addProfile: state.addProfile
+        }
     }
-  }
   
-  export default connect(mapStateToProps, mapDispatchToProps)(DisplayInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(DisplayInfo);

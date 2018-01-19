@@ -33,6 +33,14 @@ class LoginForm extends Component {
         email: "",
         description:"",
         phoneNum: ""
+      },
+      tempValue: {},
+      userId:0,
+      errors: {
+        name: false,
+        email: false,
+        description:false,
+        phoneNum: false
       }
     }
   }
@@ -72,6 +80,7 @@ class LoginForm extends Component {
   
   //Stores the input value in the Phone Number field and updates (react) state
   onPhoneNumChange = (e) => {
+    if(e.target.value )
     this.setState({
       ...this.state,
       inputValue: {
@@ -92,10 +101,21 @@ class LoginForm extends Component {
   }
  
   //Sets the redux store with all the input field values
-  onSubmit = (e) => {
-    const { inputValue } = this.state;
-    e.preventDefault();
-    this.props.addToUsers(inputValue);
+  onSubmit = (e) => {    
+    e.preventDefault();    
+    const { inputValue } = this.state;    
+    const userId = uuidv4();    
+    const tempValue = Object.assign({}, { 
+          name: inputValue.name,
+          email: inputValue.email,
+          description: inputValue.description,
+          phoneNum: inputValue.phoneNum,
+          userId:userId
+    });
+    console.log(Object.entries(tempValue));
+
+    this.props.addToUsers(tempValue);
+  
     this.setState({
       showModal:false,
       inputValue: {
@@ -103,21 +123,89 @@ class LoginForm extends Component {
         email:"",
         description:"",
         phoneNum: ""
-      }
+      },
+      tempValue:tempValue,
+      userId:userId
     });
+  }    
+   
+
+  //Edit Info
+  editInfo = (userId) => {
+
+  const tempValueCopy = Object.assign({}, this.state.tempValue);
+  this.setState({
+    ...this.state,
+    inputValue : tempValueCopy,
+    editModal:true
+  });
   } 
+
+  //On Editing the user info, the firebase database is updated
+  finalEdit = (userIdd) => {
+    const { inputValue, tempValue, userId } = this.state;  
+
+    const tempObj = Object.assign({}, { 
+      name: inputValue.name,
+      email: inputValue.email,
+      description: inputValue.description,
+      phoneNum: inputValue.phoneNum,
+      userId:userId
+  });
+
+    const ArrBig = Object.entries(this.props.users);
+    ArrBig.map((value)=>{
+      if( !undefined){
+      //const temp = value[1];
+      //const x = "user";
+      if(value[1].user.userId == userIdd)
+      console.log(value[1]);
+      debugger;
+      
+      //if(tempuserId == userIdd )
+      console.log("It worked!");
+      //}
+    }});
+    //Object.entries(this.props.users).map(([userId, { name, email, description, phoneNum}]) => {
+    // console.log(email);
+    //})
+    //this.props.editUser(tempObj, userId);
+
+    this.setState({
+      ...this.state,
+      inputValue: {
+        name:"",
+        email:"",
+        description:"",
+        phoneNum: ""
+      },
+      tempValue:tempObj,
+      editModal:false
+    });  
+
+  //  let ref = firebaseDb.ref('recipes');
+  //  return ref
+  //    .child(fId)
+  //    .update(data)
+  //    .then(() => ref.once('value'))
+  //    .then(snapshot => snapshot.val())
+  //    .catch(error => ({
+  //      errorCode: error.code,
+  //      errorMessage: error.message
+  //    }));
+  }
 
 
     
   render() { 
-    const { inputValue } = this.state;  
+    const { inputValue, tempValue, userId } = this.state; 
     return (    
-      <div className="LoginForm">        
-        <Link to="/">Home</Link>        
+      <div className="LoginForm"> 
+        <Link to="/Main">Main</Link>               
         <h1>LoginForm</h1>
           <Modal show={this.state.editModal} onHide={this.close}>
             <Modal.Header closeButton>
-              <Modal.Title>Add User Details</Modal.Title>
+              <Modal.Title>Edit User Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form>
@@ -141,7 +229,7 @@ class LoginForm extends Component {
               </Form>  
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit" onClick={this.onSubmit}>Submit</Button>
+              <Button type="submit" onClick={() => this.finalEdit(userId)}>Submit</Button>
               <Button onClick={this.close}>Close</Button>
             </Modal.Footer>
           </Modal>
@@ -176,30 +264,34 @@ class LoginForm extends Component {
               <Button onClick={this.close}>Close</Button>
             </Modal.Footer>
         </Modal>
-          
         
-                
+        <Well>
+          <DisplayInfo
+            name={tempValue.name}
+            description={tempValue.description}
+            email={tempValue.email}
+            phoneNum={tempValue.phoneNum}
+            userId={tempValue.userId}
+          />    
+        </Well>                
         <Button onClick={this.props.logout}>Log out</Button>
-                 
+        <Button onClick={() => this.editInfo(userId)}>Edit Info</Button>                 
       </div>
     );
   }
 }
 
-
+//Connecting component to redux store
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(Actions, dispatch);
 }
 
 const mapStateToProps = (state) => {
   return {
-    addProfile: state.addProfile
+    users: state.addProfile.users
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
 
-//<p>{this.props.addProfile.users.name}</p>
-//          <p>{this.props.addProfile.users.email}</p>
-//          <p>{this.props.addProfile.users.description}</p>
-//          <p>{this.props.addProfile.users.phoneNum}</p>
+
