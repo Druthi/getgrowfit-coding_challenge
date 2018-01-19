@@ -15,7 +15,7 @@ import { addUser, status } from './Actions';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider } from 'react-redux';
-
+import createLogger from "redux-logger";
 
 
 const store = createStore(

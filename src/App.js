@@ -58,29 +58,31 @@ class App extends Component {
   //    } 
   //  });
   // 
-  console.log(this.state.didMount);
-  if(this.state.didMount == false) {
-    const userRef = firebase.database().ref('users');
-    userRef.on('value', (snapshot) => {
-      let users = snapshot.val();
-      console.log(users);
-      if(users){
-        let newState = {};
-        for (let user in users) {
-          newState[users[user].userId] = {
-            name: users[user].name,
-            email: users[user].email,
-            description: users[user].description,
-            phoneNum: users[user].phoneNum
-          }      
-        }
-        this.props.pullFire(newState);
-      }
-    });
-    this.setState({ ...this.state,
-      didMount:true
-    });  
-  }      
+  //console.log(this.state.didMount);
+  //if(this.state.didMount == false) {
+  //  const userRef = firebase.database().ref('users');
+  //  userRef.on('value', (snapshot) => {
+  //    let users = snapshot.val();
+  //    console.log(users);
+  //    if(users){
+  //      let newState = {};
+  //      for (let user in users) {
+  //        newState[users[user].userId] = {
+  //          name: users[user].name,
+  //          email: users[user].email,
+  //          description: users[user].description,
+  //          phoneNum: users[user].phoneNum
+  //        }      
+  //      }
+  //      this.props.pullFire(newState);
+  //      console.log(newState);
+  //    }
+  //  });
+  //  this.setState({ ...this.state,
+  //    didMount:true
+  //  });  
+  //}  
+  this.props.getUsers();    
 }  
 
     
@@ -100,7 +102,8 @@ class App extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(Actions, dispatch);
+  return  bindActionCreators(Actions, dispatch)
+  
 }
 
 const mapStateToProps = (state) => {

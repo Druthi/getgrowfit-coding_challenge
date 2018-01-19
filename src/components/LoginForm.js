@@ -20,6 +20,7 @@ import Main from './Main';
 import DisplayInfo from'./DisplayInfo';
 
 import { pickBy } from 'lodash';
+import uuidv4 from 'uuid/v4';
 
 class LoginForm extends Component {
   constructor(props){
@@ -92,9 +93,9 @@ class LoginForm extends Component {
  
   //Sets the redux store with all the input field values
   onSubmit = (e) => {
+    const { inputValue } = this.state;
     e.preventDefault();
-    const value = this.state.inputValue
-    this.props.addUser(value);
+    this.props.addToUsers(inputValue);
     this.setState({
       showModal:false,
       inputValue: {
