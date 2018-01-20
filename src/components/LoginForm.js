@@ -8,6 +8,7 @@ import { Link } from 'react-router';
 import firebase, { auth, provider } from '../firebase/firebase.js';
 
 //Styling with React-Bootstrap
+//import { Form, ValidatedInput } from 'react-bootstrap-validation';
 import { Well, Form, FormGroup, FormControl, Button, Accordion, Modal } from 'react-bootstrap';
 
 //Redux
@@ -37,16 +38,19 @@ class LoginForm extends Component {
       tempValue: {},
       userId:0,
       errors: {
-        name: false,
-        email: false,
-        description:false,
-        phoneNum: false
+        name: "",
+        email: "",
+        description:"",
+        phoneNum: ""
+      }
+      
       }
     }
-  }
+  
 
   //Stores the input value in the Name field and updates (react) state
   onNameChange = (e) => {
+  
     this.setState({
       ...this.state,
       inputValue: {
@@ -58,6 +62,7 @@ class LoginForm extends Component {
 
   //Stores the input value in the Email field and updates (react) state
   onEmailChange = (e) => {
+    
     this.setState({
       ...this.state,
       inputValue: {
@@ -69,6 +74,7 @@ class LoginForm extends Component {
 
   //Stores the input value in the Description field and updates (react) state
   onDescriptionChange = (e) => {
+
     this.setState({
       ...this.state,
       inputValue: {
@@ -80,7 +86,6 @@ class LoginForm extends Component {
   
   //Stores the input value in the Phone Number field and updates (react) state
   onPhoneNumChange = (e) => {
-    if(e.target.value )
     this.setState({
       ...this.state,
       inputValue: {
@@ -89,6 +94,7 @@ class LoginForm extends Component {
       }
     });
   }
+
 
   //Modal closes when close() runs
   close = () => {
@@ -99,35 +105,78 @@ class LoginForm extends Component {
   open = () => {
     this.setState({ showModal: true, editModal: true });
   }
+
+   //Email validation
+   validateEmail = (value) => {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(value);
+  }
+
+  //Validation
+  validation = (inputValue) => {
+    let isError = false;
+    const errors = {};
+    if(inputValue.name == ""){
+      isError = true;
+      errors.name = 'Name is required';
+    }
+    if(inputValue.email == ""){
+      isError = true;
+      errors.email = 'Email required';
+    }    
+    else if(this.validateEmail(inputValue.email) == false){
+      isError = true;
+      errors.email = 'Enter valid email Id';
+    }
+    if(inputValue.description == ""){
+      isError = true;
+      errors.description= 'Description is required';
+    }
+    if(inputValue.phoneNum == ""){
+      isError = true;
+      errors.phoneNum = 'Phone Number is required';
+    }
+    if(isError){
+      this.setState({
+        ...this.state,
+        errors:errors
+      });
+    }
+    return isError;
+  }
  
   //Sets the redux store with all the input field values
   onSubmit = (e) => {    
-    e.preventDefault();    
-    const { inputValue } = this.state;    
-    const userId = uuidv4();    
-    const tempValue = Object.assign({}, { 
-          name: inputValue.name,
-          email: inputValue.email,
-          description: inputValue.description,
-          phoneNum: inputValue.phoneNum,
-          userId:userId
-    });
-    console.log(Object.entries(tempValue));
-
-    this.props.addToUsers(tempValue);
+    e.preventDefault();
+    const err = this.validation(this.state.inputValue); 
+    const { inputValue } = this.state;  
+    if(!err){
+      const userId = uuidv4();    
+      const tempValue = Object.assign({}, { 
+            name: inputValue.name,
+            email: inputValue.email,
+            description: inputValue.description,
+            phoneNum: inputValue.phoneNum,
+            userId:userId
+      });
+      console.log(Object.entries(tempValue));
   
-    this.setState({
-      showModal:false,
-      inputValue: {
-        name:"",
-        email:"",
-        description:"",
-        phoneNum: ""
-      },
-      tempValue:tempValue,
-      userId:userId
-    });
+      this.props.addToUsers(tempValue);
+    
+      this.setState({
+        showModal:false,
+        inputValue: {
+          name:"",
+          email:"",
+          description:"",
+          phoneNum: ""
+        },
+        tempValue:tempValue,
+        userId:userId
+      });
+    }      
   }    
+      
    
 
   //Edit Info
@@ -195,6 +244,8 @@ class LoginForm extends Component {
   //    }));
   }
 
+ 
+
 
     
   render() { 
@@ -211,19 +262,19 @@ class LoginForm extends Component {
               <Form>
                 <p>Name</p>
                 <FormGroup>
-                  <FormControl type="text" placeholder='Enter Name' value={inputValue.name} onChange={this.onNameChange}   />
+                  <FormControl type="text" messageRequired = 'Fullname Required' required="true" placeholder='Enter Name' value={inputValue.name} onChange={this.onNameChange}   />
                 </FormGroup>
                 <p>Email</p>
                 <FormGroup controlId="formInlineEmail">
-                  <FormControl type="email" value={inputValue.email} onChange={this.onEmailChange} placeholder="jane.doe@example.com" />
+                  <FormControl type="email" messageRequired = 'Email Required' required="true" value={inputValue.email} onChange={this.onEmailChange} placeholder="jane.doe@example.com" />
                 </FormGroup> 
                 <p>Description</p>
                 <FormGroup>
-                  <FormControl bsSize="large" type="text" placeholder='Enter Description' value={inputValue.description} onChange={this.onDescriptionChange}   size="large" />
+                  <FormControl bsSize="large" messageRequired = 'Description Required' required="true" type="text" placeholder='Enter Description' value={inputValue.description} onChange={this.onDescriptionChange}   size="large" />
                 </FormGroup> 
                 <p>Phone Number</p>
                 <FormGroup>
-                  <FormControl type="text" placeholder='Enter phone number' value={inputValue.phoneNum} onChange={this.onPhoneNumChange}   size="large" />
+                  <FormControl type="number" messageRequired = 'Phone Number Required' required="true" placeholder='Enter phone number' value={inputValue.phoneNum} onChange={this.onPhoneNumChange}   size="large" />
                 </FormGroup> 
                 <p>Date of Birth</p>             
               </Form>  
@@ -242,19 +293,19 @@ class LoginForm extends Component {
               <Form>
                 <p>Name</p>
                 <FormGroup>
-                  <FormControl type="text" placeholder='Enter Name' value={inputValue.name} onChange={this.onNameChange}   />
+                  <FormControl type="text" required="true" placeholder='Enter Name' value={inputValue.name} onChange={this.onNameChange}   />
                 </FormGroup>
                 <p>Email</p>
                 <FormGroup controlId="formInlineEmail">
-                  <FormControl type="email" value={inputValue.email} onChange={this.onEmailChange} placeholder="jane.doe@example.com" />
+                  <FormControl type="email" required="true" value={inputValue.email} onChange={this.onEmailChange} placeholder="jane.doe@example.com" />
                 </FormGroup> 
                 <p>Description</p>
                 <FormGroup>
-                  <FormControl bsSize="large" type="text" placeholder='Enter Description' value={inputValue.description} onChange={this.onDescriptionChange}   size="large" />
+                  <FormControl bsSize="large" required="true" type="text" placeholder='Enter Description' value={inputValue.description} onChange={this.onDescriptionChange}   size="large" />
                 </FormGroup> 
                 <p>Phone Number</p>
                 <FormGroup>
-                  <FormControl type="text" placeholder='Enter phone number' value={inputValue.phoneNum} onChange={this.onPhoneNumChange}   size="large" />
+                  <FormControl type="number" required="true" placeholder='Enter phone number' value={inputValue.phoneNum} onChange={this.onPhoneNumChange}   size="large" />
                 </FormGroup> 
                 <p>Date of Birth</p>             
               </Form>  
@@ -263,6 +314,10 @@ class LoginForm extends Component {
               <Button type="submit" onClick={this.onSubmit}>Submit</Button>
               <Button onClick={this.close}>Close</Button>
             </Modal.Footer>
+            <p>{this.state.errors.name}</p>
+            <p>{this.state.errors.email}</p>
+            <p>{this.state.errors.description}</p>
+            <p>{this.state.errors.phoneNum}</p>
         </Modal>
         
         <Well>

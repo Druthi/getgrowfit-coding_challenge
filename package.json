@@ -8,6 +8,7 @@
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.0",
     "react-bootstrap-date-picker": "^5.1.0",
+    "react-bootstrap-validation": "^0.1.11",
     "react-date-input": "0.0.2",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
