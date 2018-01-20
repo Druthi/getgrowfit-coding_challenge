@@ -33,7 +33,8 @@ class LoginForm extends Component {
         name: "",
         email: "",
         description:"",
-        phoneNum: ""
+        phoneNum: "",
+        dob:""
       },
       tempValue: {},
       userId:0,
@@ -41,7 +42,8 @@ class LoginForm extends Component {
         name: "",
         email: "",
         description:"",
-        phoneNum: ""
+        phoneNum: "",
+        dob:""
       }
       
       }
@@ -91,6 +93,17 @@ class LoginForm extends Component {
       inputValue: {
         ...this.state.inputValue,
         phoneNum: e.target.value
+      }
+    });
+  }
+
+  //Stores the input value in the Date of Birth field and updates (react) state
+  onDateChange = (e) => {
+    this.setState({
+      ...this.state,
+      inputValue: {
+        ...this.state.inputValue,
+        dob: e.target.value
       }
     });
   }
@@ -157,6 +170,7 @@ class LoginForm extends Component {
             email: inputValue.email,
             description: inputValue.description,
             phoneNum: inputValue.phoneNum,
+            dob: inputValue.dob,
             userId:userId
       });
       console.log(Object.entries(tempValue));
@@ -169,7 +183,8 @@ class LoginForm extends Component {
           name:"",
           email:"",
           description:"",
-          phoneNum: ""
+          phoneNum: "",
+          don: ""
         },
         tempValue:tempValue,
         userId:userId
@@ -262,21 +277,24 @@ class LoginForm extends Component {
               <Form>
                 <p>Name</p>
                 <FormGroup>
-                  <FormControl type="text" messageRequired = 'Fullname Required' required="true" placeholder='Enter Name' value={inputValue.name} onChange={this.onNameChange}   />
+                  <FormControl type="text"  placeholder='Enter Name' value={inputValue.name} onChange={this.onNameChange}   />
                 </FormGroup>
                 <p>Email</p>
                 <FormGroup controlId="formInlineEmail">
-                  <FormControl type="email" messageRequired = 'Email Required' required="true" value={inputValue.email} onChange={this.onEmailChange} placeholder="jane.doe@example.com" />
+                  <FormControl type="email" value={inputValue.email} onChange={this.onEmailChange} placeholder="jane.doe@example.com" />
                 </FormGroup> 
                 <p>Description</p>
                 <FormGroup>
-                  <FormControl bsSize="large" messageRequired = 'Description Required' required="true" type="text" placeholder='Enter Description' value={inputValue.description} onChange={this.onDescriptionChange}   size="large" />
+                  <FormControl bsSize="large" type="text" placeholder='Enter Description' value={inputValue.description} onChange={this.onDescriptionChange}   size="large" />
                 </FormGroup> 
                 <p>Phone Number</p>
                 <FormGroup>
-                  <FormControl type="number" messageRequired = 'Phone Number Required' required="true" placeholder='Enter phone number' value={inputValue.phoneNum} onChange={this.onPhoneNumChange}   size="large" />
+                  <FormControl type="number" placeholder='Enter phone number' value={inputValue.phoneNum} onChange={this.onPhoneNumChange}   size="large" />
                 </FormGroup> 
-                <p>Date of Birth</p>             
+                <p>Date of Birth</p> 
+                <FormGroup>
+                  <FormControl type="date" placeholder='Enter phone number' value={inputValue.date} onChange={this.onDateChange} />
+                </FormGroup>             
               </Form>  
             </Modal.Body>
             <Modal.Footer>
@@ -293,21 +311,24 @@ class LoginForm extends Component {
               <Form>
                 <p>Name</p>
                 <FormGroup>
-                  <FormControl type="text" required="true" placeholder='Enter Name' value={inputValue.name} onChange={this.onNameChange}   />
+                  <FormControl type="text" placeholder='Enter Name' value={inputValue.name} onChange={this.onNameChange}   />
                 </FormGroup>
                 <p>Email</p>
                 <FormGroup controlId="formInlineEmail">
-                  <FormControl type="email" required="true" value={inputValue.email} onChange={this.onEmailChange} placeholder="jane.doe@example.com" />
+                  <FormControl type="email" value={inputValue.email} onChange={this.onEmailChange} placeholder="jane.doe@example.com" />
                 </FormGroup> 
                 <p>Description</p>
                 <FormGroup>
-                  <FormControl bsSize="large" required="true" type="text" placeholder='Enter Description' value={inputValue.description} onChange={this.onDescriptionChange}   size="large" />
+                  <FormControl bsSize="large" type="text" placeholder='Enter Description' value={inputValue.description} onChange={this.onDescriptionChange}   size="large" />
                 </FormGroup> 
                 <p>Phone Number</p>
                 <FormGroup>
-                  <FormControl type="number" required="true" placeholder='Enter phone number' value={inputValue.phoneNum} onChange={this.onPhoneNumChange}   size="large" />
+                  <FormControl type="number" placeholder='Enter phone number' value={inputValue.phoneNum} onChange={this.onPhoneNumChange}   size="large" />
                 </FormGroup> 
-                <p>Date of Birth</p>             
+                <p>Date of Birth</p> 
+                <FormGroup>
+                  <FormControl type="date" placeholder='Enter phone number' value={inputValue.date} onChange={this.onDateChange} />
+                </FormGroup>             
               </Form>  
             </Modal.Body>
             <Modal.Footer>
@@ -326,6 +347,7 @@ class LoginForm extends Component {
             description={tempValue.description}
             email={tempValue.email}
             phoneNum={tempValue.phoneNum}
+            dob={tempValue.dob}
             userId={tempValue.userId}
           />    
         </Well>                

@@ -17,7 +17,7 @@ class DisplayInfo extends Component {
         console.log(this.props.addProfile);
         //const obj = Object.assign(this.props.ingrid);
         //console.log(obj);
-        console.log(this.props.addProfile);
+        
 
         return (
             <div className="DisplayInfo">  
@@ -26,6 +26,7 @@ class DisplayInfo extends Component {
                    <p>Email:{this.props.email}</p>
                    <p>description:{this.props.description}</p>
                    <p>Phone Number:{this.props.phoneNum}</p>
+                   <p>Date of Birth:{this.props.dob}</p>
             </div>
         );
     }
