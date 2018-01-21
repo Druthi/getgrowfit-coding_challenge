@@ -59,9 +59,7 @@ export function addToUsers(user) {
 export function editUsers(user, fireId) {  
   return dispatch => {
 
-      let ref = firebase.database().ref('users')
-        .child(fireId)
-        .update(user);
+      let ref = firebase.database().ref(`/users/${fireId}`).update(user);
     
     //const usersRef = firebase.database().child(user.userId).update(user);
     //usersRef.push({

@@ -224,8 +224,11 @@ class LoginForm extends Component {
     for(let val in this.props.users){     
       if(val == userId)
       {
-      console.log(this.props.users[val]);
-      this.props.editUsers(this.props.users[val], this.props.users[val].fireId);
+      let temp = {};
+      temp['user'] = tempObj;
+      console.log(temp);
+      console.log(this.props.users[val].fireId);
+      this.props.editUsers(temp, this.props.users[val].fireId);
     }
     };  
 
@@ -274,7 +277,7 @@ class LoginForm extends Component {
                 </FormGroup> 
                 <p>Date of Birth</p> 
                 <FormGroup>
-                  <FormControl type="date" placeholder='Enter phone number' value={inputValue.date} onChange={this.onDateChange} />
+                  <FormControl type="date" placeholder='Enter phone number' value={inputValue.dob} onChange={this.onDateChange} />
                 </FormGroup>             
               </Form>  
             </Modal.Body>
