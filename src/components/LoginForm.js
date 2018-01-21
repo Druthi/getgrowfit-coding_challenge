@@ -149,6 +149,10 @@ class LoginForm extends Component {
       isError = true;
       errors.phoneNum = 'Phone Number is required';
     }
+    if(inputValue.dob == ""){
+      isError = true;
+      errors.dob = 'Date of Birth is required';
+    }
     if(isError){
       this.setState({
         ...this.state,
@@ -165,15 +169,15 @@ class LoginForm extends Component {
     const { inputValue } = this.state;  
     if(!err){
       const userId = uuidv4();    
-      const tempValue = Object.assign({}, { 
-            name: inputValue.name,
-            email: inputValue.email,
-            description: inputValue.description,
-            phoneNum: inputValue.phoneNum,
-            dob: inputValue.dob,
-            userId:userId
-      });
-      console.log(Object.entries(tempValue));
+      let tempValue = Object.assign({}, {
+        name: inputValue.name,
+        email: inputValue.email,
+        description: inputValue.description,
+        phoneNum: inputValue.phoneNum,
+        dob: inputValue.dob,
+        userId:userId
+                 
+      });      
   
       this.props.addToUsers(tempValue);
     
@@ -197,43 +201,33 @@ class LoginForm extends Component {
   //Edit Info
   editInfo = (userId) => {
 
-  const tempValueCopy = Object.assign({}, this.state.tempValue);
   this.setState({
     ...this.state,
-    inputValue : tempValueCopy,
+    inputValue :this.state.tempValue,
     editModal:true
   });
   } 
 
   //On Editing the user info, the firebase database is updated
-  finalEdit = (userIdd) => {
-    const { inputValue, tempValue, userId } = this.state;  
+  finalEdit = (userId) => {
+    const { inputValue, tempValue } = this.state;  
 
     const tempObj = Object.assign({}, { 
       name: inputValue.name,
       email: inputValue.email,
       description: inputValue.description,
       phoneNum: inputValue.phoneNum,
+      dob: inputValue.dob,
       userId:userId
   });
 
-    const ArrBig = Object.entries(this.props.users);
-    ArrBig.map((value)=>{
-      if( !undefined){
-      //const temp = value[1];
-      //const x = "user";
-      if(value[1].user.userId == userIdd)
-      console.log(value[1]);
-      debugger;
-      
-      //if(tempuserId == userIdd )
-      console.log("It worked!");
-      //}
-    }});
-    //Object.entries(this.props.users).map(([userId, { name, email, description, phoneNum}]) => {
-    // console.log(email);
-    //})
-    //this.props.editUser(tempObj, userId);
+    for(let val in this.props.users){     
+      if(val == userId)
+      {
+      console.log(this.props.users[val]);
+      this.props.editUsers(this.props.users[val], this.props.users[val].fireId);
+    }
+    };  
 
     this.setState({
       ...this.state,
@@ -245,32 +239,19 @@ class LoginForm extends Component {
       },
       tempValue:tempObj,
       editModal:false
-    });  
-
-  //  let ref = firebaseDb.ref('recipes');
-  //  return ref
-  //    .child(fId)
-  //    .update(data)
-  //    .then(() => ref.once('value'))
-  //    .then(snapshot => snapshot.val())
-  //    .catch(error => ({
-  //      errorCode: error.code,
-  //      errorMessage: error.message
-  //    }));
+    }); 
   }
 
- 
-
-
-    
+      
   render() { 
+    const styles = {color:'red'};
     const { inputValue, tempValue, userId } = this.state; 
     return (    
       <div className="LoginForm"> 
         <Link to="/Main">Main</Link>               
         <h1>LoginForm</h1>
           <Modal show={this.state.editModal} onHide={this.close}>
-            <Modal.Header closeButton>
+            <Modal.Header>
               <Modal.Title>Edit User Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -304,7 +285,7 @@ class LoginForm extends Component {
           </Modal>
         
           <Modal show={this.state.showModal} onHide={this.close}>
-            <Modal.Header closeButton>
+            <Modal.Header>
               <Modal.Title>Add User Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -335,21 +316,22 @@ class LoginForm extends Component {
               <Button type="submit" onClick={this.onSubmit}>Submit</Button>
               <Button onClick={this.close}>Close</Button>
             </Modal.Footer>
-            <p>{this.state.errors.name}</p>
-            <p>{this.state.errors.email}</p>
-            <p>{this.state.errors.description}</p>
-            <p>{this.state.errors.phoneNum}</p>
+            <p style = {styles}>{this.state.errors.name}</p>
+            <p style = {styles}>{this.state.errors.email}</p>
+            <p style = {styles}>{this.state.errors.description}</p>
+            <p style = {styles}>{this.state.errors.phoneNum}</p>
+            <p style = {styles}>{this.state.errors.dob}</p>
         </Modal>
         
         <Well>
-          <DisplayInfo
-            name={tempValue.name}
-            description={tempValue.description}
-            email={tempValue.email}
-            phoneNum={tempValue.phoneNum}
-            dob={tempValue.dob}
-            userId={tempValue.userId}
-          />    
+        <DisplayInfo
+          name={tempValue.name}
+          description={tempValue.description}
+          email={tempValue.email}
+          phoneNum={tempValue.phoneNum}
+          dob={tempValue.dob}
+          userId={tempValue.userId}
+        />    
         </Well>                
         <Button onClick={this.props.logout}>Log out</Button>
         <Button onClick={() => this.editInfo(userId)}>Edit Info</Button>                 

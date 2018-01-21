@@ -15,12 +15,26 @@ export const EDIT_USER = 'EDIT_USER';
 export function getUsers() {
   return dispatch => {
   firebase.database().ref('users').on('value', snap => {
-       const users = snap.val();
-        dispatch({
-          type: GET_USERS,
-          users
-        })
-      });
+       const usersFire = snap.val();
+      console.log(usersFire);
+       let users = {};
+       for (let user in usersFire) {
+        users[usersFire[user].user.userId] = {          
+          name: usersFire[user].user.name,
+          email: usersFire[user].user.email,
+          description: usersFire[user].user.description,
+          phoneNum: usersFire[user].user.phoneNum,
+          dob: usersFire[user].user.dob,
+          userId: usersFire[user].user.userId,
+          fireId: user
+        }         
+      } 
+      console.log(users);   
+      dispatch({
+        type: GET_USERS,
+        users 
+      })         
+   });
   }
 }
   
@@ -32,29 +46,34 @@ export function addToUsers(user) {
     usersRef.push({
       user
     })
-    .then(() => {
-      dispatch({
-        type: ADD_TO_USERS,
-        user
-      });
-    })
+   //.then(() => {
+   //  dispatch({
+   //    type: ADD_TO_USERS,
+   //    user
+   //  });
+   //})
   }
 }
 
 //Edit Firebase and Store
-export function editUsers(user, id) {  
+export function editUsers(user, fireId) {  
   return dispatch => {
-    const usersRef = firebase.database().child(id).update(user);
-    usersRef.push({
-      user
-    })
-    .then(() => {
-      dispatch({
-        type: EDIT_USER,
-        user
-      });
-    })
-  }
+
+      let ref = firebase.database().ref('users')
+        .child(fireId)
+        .update(user);
+    
+    //const usersRef = firebase.database().child(user.userId).update(user);
+    //usersRef.push({
+    //  user
+    //})
+    //.then(() => {
+    //  dispatch({
+    //    type: EDIT_USER,
+    //    user
+    //  });
+    //})
+  }//
 }
   
     

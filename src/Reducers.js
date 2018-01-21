@@ -18,19 +18,21 @@ const addProfile = (state = initialState, action)  => {
     switch(action.type) {
                     
         case 'ADD_TO_USERS':
-            console.log(action.user);
-            const users = action.users;
+            console.log(action.user)
+            let temp = Object.assign({}, action.user);
+            //console.log(temp);
+            //console.log(...state.users);
             return Object.assign({}, state, { ...state, 
-                users: { ...state.users, users }            
+                users: { ...state.users, temp}            
                 });
-        
+            //break;        
 
         case 'GET_USERS':
             console.log(action.users);
             return Object.assign({}, state, { ...state, 
                 users: action.users               
                 });
-
+            //break;
         default:
         return state;
     }    

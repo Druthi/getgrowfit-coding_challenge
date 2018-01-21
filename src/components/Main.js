@@ -5,7 +5,27 @@ import App from '../App';
 
 
 
+
 class Main extends Component {
+
+ 
+//  componentWillMount() {
+//    setTimeout(() => {
+//      window.history.forward()
+//    }, 0);
+//    window.onunload=function(){null};
+//  }
+  
+ //function noBack()
+ // {
+ //     window.history.forward()
+ // }
+ //noBack();
+ //window.onload = noBack;
+ //window.onpageshow = function(evt) { if (evt.persisted) noBack() }
+ //window.onunload = function() { void (0) }
+
+  
   render() {
     return (
       <div className="Main">

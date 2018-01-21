@@ -17,6 +17,9 @@ import { connect } from 'react-redux';
 import * as Actions from './Actions';
 import { bindActionCreators } from 'redux';
 
+import { isEmpty } from 'lodash';
+import _ from 'lodash';
+
 
 class App extends Component {
 
@@ -58,6 +61,7 @@ class App extends Component {
   //    } 
   //  });
   // 
+  //if((_.isEmpty(this.props.users)))
   this.props.getUsers();    
 }      
 
