@@ -17,8 +17,6 @@ import { connect } from 'react-redux';
 import * as Actions from './Actions';
 import { bindActionCreators } from 'redux';
 
-import { isEmpty } from 'lodash';
-import _ from 'lodash';
 
 
 class App extends Component {
@@ -26,20 +24,21 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null,
-      didMount:false      
+      user: null,      
     }
   }
 
   login = () => {
-    auth.signInWithPopup(provider) 
-      .then((result) => {
-        const user = result.user;
+    auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(function() {    
+        return auth.signInWithPopup(provider);
+      }).then((result) => {
+        const user = result.user; 
+        console.log(user.email);       
         this.setState({
           user:user
         });   
-      });      
-      //console.log(this.state.user);
+      });     
   }
 
   logout = () => {
@@ -49,19 +48,12 @@ class App extends Component {
           user: null
         });
       });
-    //console.log(this.state.user.email);
   }
 
-//On refreshing page, user is still logged in.
+ 
+
 //When the component is rendered, all the data in firebase is updated to the store
-  componentDidMount() {
-  //  auth.onAuthStateChanged((user) => {
-  //    if (user) {
-  //      this.setState({ user });
-  //    } 
-  //  });
-  // 
-  //if((_.isEmpty(this.props.users)))
+  componentDidMount() {    
   this.props.getUsers();    
 }      
 

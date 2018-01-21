@@ -165,8 +165,8 @@ class LoginForm extends Component {
   //Sets the redux store with all the input field values
   onSubmit = (e) => {    
     e.preventDefault();
-    const err = this.validation(this.state.inputValue); 
     const { inputValue } = this.state;  
+    const err = this.validation(inputValue);     
     if(!err){
       const userId = uuidv4();    
       let tempValue = Object.assign({}, {
@@ -175,11 +175,10 @@ class LoginForm extends Component {
         description: inputValue.description,
         phoneNum: inputValue.phoneNum,
         dob: inputValue.dob,
-        userId:userId
-                 
+        userId:userId                 
       });      
   
-      this.props.addToUsers(tempValue);
+      this.props.addToUsers(tempValue); //Action call to add to users
     
       this.setState({
         showModal:false,
@@ -188,7 +187,7 @@ class LoginForm extends Component {
           email:"",
           description:"",
           phoneNum: "",
-          don: ""
+          dob: ""
         },
         tempValue:tempValue,
         userId:userId
@@ -200,7 +199,6 @@ class LoginForm extends Component {
 
   //Edit Info
   editInfo = (userId) => {
-
   this.setState({
     ...this.state,
     inputValue :this.state.tempValue,
@@ -210,43 +208,67 @@ class LoginForm extends Component {
 
   //On Editing the user info, the firebase database is updated
   finalEdit = (userId) => {
-    const { inputValue, tempValue } = this.state;  
+    const { inputValue, tempValue } = this.state; 
+    console.log(inputValue);
+    const err = this.validation(inputValue); //Checking if all input fields are valid
+    if(!err){
+      const tempObj = Object.assign({}, { 
+        name: inputValue.name,
+        email: inputValue.email,
+        description: inputValue.description,
+        phoneNum: inputValue.phoneNum,
+        dob: inputValue.dob,
+        userId:userId
+      });
+  
+      for(let val in this.props.users){     
+        if(val == userId)
+        { 
+          let temp = {};
+          temp['user'] = tempObj;
+          this.props.editUsers(temp, this.props.users[val].fireId); //Action call to edit Users
+        }
+      };  
+  
+      this.setState({
+        ...this.state,
+          inputValue: {
+            name:"",
+            email:"",
+            description:"",
+            phoneNum: ""
+          },
+          tempValue:tempObj,
+          editModal:false
+      }); 
+    }    
+  }
 
-    const tempObj = Object.assign({}, { 
-      name: inputValue.name,
-      email: inputValue.email,
-      description: inputValue.description,
-      phoneNum: inputValue.phoneNum,
-      dob: inputValue.dob,
-      userId:userId
-  });
-
-    for(let val in this.props.users){     
-      if(val == userId)
-      {
-      let temp = {};
-      temp['user'] = tempObj;
-      console.log(temp);
-      console.log(this.props.users[val].fireId);
-      this.props.editUsers(temp, this.props.users[val].fireId);
+  //If user has already logged in before, his/her info 
+  //will be displayed without modal asking for user details.
+  componentWillMount () {
+    const users = this.props.users;        
+    for(let key in users){
+      if(users[key].email == this.props.user.email){
+        this.setState({
+          ...this.state,
+          tempValue:{
+            name: users[key].name,
+            email: users[key].email,
+            description: users[key].description,
+            phoneNum: users[key].phoneNum,
+            dob: users[key].dob,
+            userId:key
+          },                  
+          showModal:false,
+          userId:key,
+        });
+      }
     }
-    };  
-
-    this.setState({
-      ...this.state,
-      inputValue: {
-        name:"",
-        email:"",
-        description:"",
-        phoneNum: ""
-      },
-      tempValue:tempObj,
-      editModal:false
-    }); 
   }
 
       
-  render() { 
+  render() {      
     const styles = {color:'red'};
     const { inputValue, tempValue, userId } = this.state; 
     return (    

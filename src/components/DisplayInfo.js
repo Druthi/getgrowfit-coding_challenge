@@ -14,11 +14,7 @@ class DisplayInfo extends Component {
         
     }
     render() {
-        console.log(this.props.addProfile);
-        //const obj = Object.assign(this.props.ingrid);
-        //console.log(obj);
-        
-
+       
         return (
             <div className="DisplayInfo">  
                 <h1>WELCOME {this.props.name}</h1>              
