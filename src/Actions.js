@@ -1,5 +1,5 @@
 //Firebase
-import firebase, { auth, provider } from './firebase/firebase.js';
+import firebase from './firebase/firebase.js';
 
 
 //Action Types
@@ -52,7 +52,7 @@ export function addToUsers(user) {
 //Edit Firebase and Store
 export function editUsers(user, fireId) {  
   return dispatch => {
-      let ref = firebase.database().ref(`/users/${fireId}`).update(user);
+      firebase.database().ref(`/users/${fireId}`).update(user);
   }
 }
   

@@ -1,7 +1,5 @@
 //React
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { Link } from 'react-router';
 
 //Styling with React Bootstrap
 import { Button } from 'react-bootstrap';
@@ -63,7 +61,7 @@ class App extends Component {
           {this.state.user ?
           <LoginForm user={this.state.user} logout={this.logout}/>              
           :
-          <button onClick={this.login}>Log In</button>            
+          <Button onClick={this.login}>Log In</Button>            
           }          
       </div>
     );

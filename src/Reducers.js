@@ -1,11 +1,5 @@
 import { combineReducers } from 'redux';
 
-//import Action
-import { ADD_TO_USERS, GET_USERS  } from './Actions';
-
-//Import Firebase
-import firebase from './firebase/firebase.js';
-
 
 const initialState = {
     users:{}    

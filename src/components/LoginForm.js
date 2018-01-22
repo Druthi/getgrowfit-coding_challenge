@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 
 //Routing
 import { Link } from 'react-router';
 
-//Firebase
-import firebase, { auth, provider } from '../firebase/firebase.js';
-
 //Styling with React-Bootstrap
 //import { Form, ValidatedInput } from 'react-bootstrap-validation';
-import { Well, Form, FormGroup, FormControl, Button, Accordion, Modal } from 'react-bootstrap';
+import { Well, Form, FormGroup, FormControl, Button, Modal } from 'react-bootstrap';
+
+//Firebase
+import firebase, { auth, provider } from '../firebase/firebase.js';
 
 //Redux
 import { connect } from 'react-redux';
@@ -17,10 +16,8 @@ import * as Actions from '../Actions';
 import { bindActionCreators } from 'redux';
 
 //import component
-import Main from './Main';
 import DisplayInfo from'./DisplayInfo';
 
-import { pickBy } from 'lodash';
 import uuidv4 from 'uuid/v4';
 
 class LoginForm extends Component {
@@ -129,27 +126,27 @@ class LoginForm extends Component {
   validation = (inputValue) => {
     let isError = false;
     const errors = {};
-    if(inputValue.name == ""){
+    if(inputValue.name === ""){
       isError = true;
       errors.name = 'Name is required';
     }
-    if(inputValue.email == ""){
+    if(inputValue.email === ""){
       isError = true;
       errors.email = 'Email required';
     }    
-    else if(this.validateEmail(inputValue.email) == false){
+    else if(this.validateEmail(inputValue.email) === false){
       isError = true;
       errors.email = 'Enter valid email Id';
     }
-    if(inputValue.description == ""){
+    if(inputValue.description === ""){
       isError = true;
       errors.description= 'Description is required';
     }
-    if(inputValue.phoneNum == ""){
+    if(inputValue.phoneNum === ""){
       isError = true;
       errors.phoneNum = 'Phone Number is required';
     }
-    if(inputValue.dob == ""){
+    if(inputValue.dob === ""){
       isError = true;
       errors.dob = 'Date of Birth is required';
     }
@@ -190,10 +187,17 @@ class LoginForm extends Component {
           dob: ""
         },
         tempValue:tempValue,
-        userId:userId
+        userId:userId,
+        errors: {
+          name: "",
+          email: "",
+          description:"",
+          phoneNum: "",
+          dob:""
+        }
       });
     }      
-  }    
+  }   
       
    
 
@@ -208,7 +212,7 @@ class LoginForm extends Component {
 
   //On Editing the user info, the firebase database is updated
   finalEdit = (userId) => {
-    const { inputValue, tempValue } = this.state; 
+    const { inputValue } = this.state; 
     console.log(inputValue);
     const err = this.validation(inputValue); //Checking if all input fields are valid
     if(!err){
@@ -222,7 +226,7 @@ class LoginForm extends Component {
       });
   
       for(let val in this.props.users){     
-        if(val == userId)
+        if(val === userId)
         { 
           let temp = {};
           temp['user'] = tempObj;
@@ -247,24 +251,24 @@ class LoginForm extends Component {
   //If user has already logged in before, his/her info 
   //will be displayed without modal asking for user details.
   componentWillMount () {
-    const users = this.props.users;        
-    for(let key in users){
-      if(users[key].email == this.props.user.email){
-        this.setState({
-          ...this.state,
-          tempValue:{
-            name: users[key].name,
-            email: users[key].email,
-            description: users[key].description,
-            phoneNum: users[key].phoneNum,
-            dob: users[key].dob,
-            userId:key
-          },                  
-          showModal:false,
-          userId:key,
-        });
-      }
-    }
+    const users = this.props.users;
+        for(let key in users){
+          if(users[key].email === this.props.user.email){
+            this.setState({
+              ...this.state,
+              tempValue:{
+                name: users[key].name,
+                email: users[key].email,
+                description: users[key].description,
+                phoneNum: users[key].phoneNum,
+                dob: users[key].dob,
+                userId:key
+              },                  
+              showModal:false,
+              userId:key,
+            });
+          }
+        }                
   }
 
       
@@ -307,6 +311,11 @@ class LoginForm extends Component {
               <Button type="submit" onClick={() => this.finalEdit(userId)}>Submit</Button>
               <Button onClick={this.close}>Close</Button>
             </Modal.Footer>
+            <p style = {styles}>{this.state.errors.name}</p>
+            <p style = {styles}>{this.state.errors.email}</p>
+            <p style = {styles}>{this.state.errors.description}</p>
+            <p style = {styles}>{this.state.errors.phoneNum}</p>
+            <p style = {styles}>{this.state.errors.dob}</p>
           </Modal>
         
           <Modal show={this.state.showModal} onHide={this.close}>

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { ListGroupItem, ListGroup, Well, Button, Panel, Accordion } from 'react-bootstrap';
-import App from '../App';
 
 //Redux
 import { connect } from 'react-redux';
@@ -9,10 +7,6 @@ import { bindActionCreators } from 'redux';
 
 
 class DisplayInfo extends Component {
-    constructor(props) {
-        super(props);
-        
-    }
     render() {
        
         return (

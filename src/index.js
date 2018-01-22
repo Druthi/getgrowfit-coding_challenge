@@ -11,11 +11,10 @@ import Main from './components/Main';
 //Store
 import { createStore, applyMiddleware } from 'redux';
 import { rootReducer } from './Reducers';
-import { addUser, status } from './Actions';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider } from 'react-redux';
-import createLogger from "redux-logger";
+
 
 
 const store = createStore(
